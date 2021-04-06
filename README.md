@@ -125,7 +125,7 @@ This project has been made by Emanuele Chini (matr. 202488) and Francesco Malag√
 The initiator script gave us this requirements:
 - Host a number address: 199 
 - Host b number address: 292
-- Host a number address: 200 
+- Host c number address: 200 
 
 ## Network design and implementation 
 In order to satisfy the project requirements we decided to create 4 subnet, which are respectively:
