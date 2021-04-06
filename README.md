@@ -137,8 +137,8 @@ In order to satisfy the project requirements we decided to create 4 subnet, whic
 
 
 ## Test and results
-To test our network we gave the command ping 192.168.4.2 from both host-a and host-b.
-After it compiled succesfully, in order to obtain the HMTL page from host-a we used the command (sudo) curl 192.168.4.2.
+To test our network we gave the command `ping -c3 192.168.4.2` from both host-a and host-b.
+After it compiled succesfully, in order to obtain the HMTL page from host-a we used the command `curl 192.168.4.2`.
 Here there is the result:
 ```
 <!DOCTYPE html>
