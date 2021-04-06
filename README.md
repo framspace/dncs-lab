@@ -121,7 +121,7 @@ The assignment deliverable consists of a Github repository containing:
 
 This project has been made by Emanuele Chini (matr. 202488) and Francesco Malagò (matr. 172080). 
 
-##Requirements
+## Requirements
 The initiator script gave us this requirements:
 - Host a number address: 199 
 - Host b number address: 292
@@ -136,7 +136,7 @@ In order to satisfy the project requirements we decided to create 4 subnet, whic
 
 
 
-##Test and results
+## Test and results
 To test our network we gave the command ping 192.168.4.2 from both host-a and host-b.
 After it compiled succesfully, in order to obtain the HMTL page from host-a we used the command (sudo) curl 192.168.4.2.
 Here there is the result:
