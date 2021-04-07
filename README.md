@@ -271,7 +271,7 @@ sudo ip link set dev enp0s10 up
 
 ## Test and results
 To test our network, we bringed up the newtwork with `vagrant up`, then we logged in each VM with `vagrant ssh`.
-Then we used the command `ping -c3` from both host-a and host-b to verify the reachability of host-c.
+Then we used the command `ping -c3 192.168.4.2` from both host-a and host-b to verify the reachability of host-c.
 
 After that, in order to obtain the HMTL page from host-a we used the command `curl 192.168.4.2`.
 The result is shown below:
