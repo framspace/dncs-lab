@@ -378,3 +378,6 @@ function changeCookie() {
 </body>
 </html>  
 ```
+
+
+![](https://github.com/EmaChini/dncs-lab/blob/master/nginx_logo.png)
