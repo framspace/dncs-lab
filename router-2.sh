@@ -1,6 +1,6 @@
 export DEBIAN_FRONTEND=noninteractive
-# Startup commands go here
-#Network set up
+
+#Network setup
 sudo sysctl -w net.ipv4.ip_forward=1
 sudo ip addr add 192.168.1.2/30 dev enp0s9
 sudo ip link set dev enp0s9 up
