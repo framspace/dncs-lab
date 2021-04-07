@@ -157,22 +157,34 @@ We modifed the paths to the start up script for every virtual machine (default i
 In the various scripts we used several commands which are explained below:
 - In order to know what interfaces are physically installed on a system it's necessary to use this command because `ifconfig` shows only interfaces that are in a configured state. 
 
-`dsmeg| grep -i eth`
+```
+dsmeg| grep -i eth
+```
 - Assignes an IP address to a specific interface.
 
-`ip addr add [ip] dev [interface]`
+```
+ip addr add [ip] dev [interface]
+```
 - Set's the interface in the "up" status.
 
-`ip link set dev [interface] up`
+```
+ip link set dev [interface] up
+```
 - Creates a VLAN using an existing interface and assigns a tag.
 
-`ip link add link [interface] name [VLAN] type vlan id [tag]`
+```
+ip link add link [interface] name [VLAN] type vlan id [tag]
+```
 - Enables IP forwarding.
 
-`sysctl -w net.ipv4.ip_forward=1`
+```
+sysctl -w net.ipv4.ip_forward=1
+```
 - Redirects all the traffic coming from a subnet to an ip address through an interface.
 
-`ip route add [subnets addresses] via [ip] dev [interface]`
+```
+ip route add [subnets addresses] via [ip] dev [interface]
+```
 - These commands configure the switch and assign a VLAN tag to the interface.
 ```
 ovs-vsctl add-br switch
