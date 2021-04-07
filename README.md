@@ -118,28 +118,163 @@ The assignment deliverable consists of a Github repository containing:
 
 # Design
 
+## Team members
 
-This project has been made by Emanuele Chini (matr. 202488) and Francesco Malagò (matr. 172080). 
+This project was made by Emanuele Chini (matr. 202488) and Francesco Malagò (matr. 172080). 
 
 ## Requirements
 The initiator script gave us this requirements:
-- Host a number address: 199 
-- Host b number address: 292
-- Host c number address: 200 
+- Host a usable addresses: 199 
+- Host b usable addresses: 292
+- Host c usable addresses: 200 
+
+## Subnets
+In order to satisfy the project requirements we decided to create 4 subnet, which are respectively:
+- 192.168.1.0/30 between Router-1 and Router-2 in order to cover only the andresses of the two routers.
+- 192.168.0.0/24 between Host-a and Router-1 in order to cover the 199 addresses required (2^8-2=254 > 199)
+- 192.168.3.0/23 between Host-b and Router-1 in order to cover the 292 addresses required (2^9-2=510 > 292)
+- 192.168.4.0/24 between Host-c and Router-2 in order to cover the 200 addresses required
 
 ## Network design and implementation 
-In order to satisfy the project requirements we decided to create 4 subnet, which are respectively:
-1. Router-1 <--> Router-2, with IP 192.168.1.1/30 
-2. Router-1 <--> Host-b, with IP 192.168.3.1/23
-3. Router-1 <--> Host-a, with IP 192.168.0.1/24
-4. Router-2 <--> Host-c, with IP 192.168.4.2/24
 
+## IP and VLANs table
+|  Device  | Interface  |     IP      | Subnet |
+| :------: | :--------: | :---------: | :----: |
+| Router-1 |  enp0s9    | 192.168.1.1 |   1    |
+| Router-2 |  enp0s9    | 192.168.1.2 |   1    |
+| Router-1 | enp0s8.2   | 192.168.0.1 |   2    |
+|  Host-a  |  enp0s8    | 192.168.0.2 |   2    |
+| Router-1 | enp0s8.3   | 192.168.3.1 |   3    |
+|  Host-b  |  enp0s8    | 192.168.3.2 |   3    |
+| Router-2 |  enp0s8    | 192.168.4.1 |   4    |
+|  Host-c  |  enp0s8    | 192.168.4.2 |   4    |
 
+## Vagrant file
+The vagrant file contains the basic setup for every virtual machine, including the path to each start up script.
+We modifed the paths to the start up script for every virtual machine (default is common.sh), afterwards we also increased the virtual memory dedicated to Host-c from 256 MB to 512 MB to be able to run the Docker image.
+
+## List of commands
+In the various scripts we used several commands which are explained below:
+- In order to know what interfaces are physically installed on a system it's necessary to use this command because `ifconfig` shows only interfaces that are in a configured state. 
+
+```
+dsmeg| grep -i eth
+```
+- Assignes an IP address to a specific interface.
+
+```
+ip addr add [ip] dev [interface]
+```
+- Set's the interface in the "up" status.
+
+```
+ip link set dev [interface] up
+```
+- Creates a VLAN using an existing interface and assigns a tag.
+
+```
+ip link add link [interface] name [VLAN] type vlan id [tag]
+```
+- Enables IP forwarding.
+
+```
+sysctl -w net.ipv4.ip_forward=1
+```
+- Redirects all the traffic coming from a subnet to an ip address through an interface.
+
+```
+ip route add [subnets addresses] via [ip] dev [interface]
+```
+- These commands configure the switch and assign a VLAN tag to the interface.
+```
+ovs-vsctl add-br switch
+ovs-vsctl add-port switch [interface]
+ovs-vsctl add-port switch [interface] tag="[tag]"
+```
+- These commands install docker, the test docker image and run them.
+```
+apt update
+apt -y install docker.io
+systemctl start docker
+systemctl enable docker
+docker pull dustnic82/nginx-test
+docker run --name nginx -p 80:80 -d dustnic82/nginx-test 
+```
+
+## Configuration
+For each device we created a script file with all the commands necessary, the content of which is shown below.
+
+### Host-a
+```
+sudo ip addr add 192.168.0.2/24 dev enp0s8
+sudo ip link set dev enp0s8 up
+sudo ip route add 192.168.0.0/21 via 192.168.0.1
+```
+### Host-b
+```
+sudo ip a add 192.168.3.2/23 dev enp0s8
+sudo ip link set dev enp0s8 up
+sudo ip route add 192.168.0.0/21 via 192.168.3.1
+```
+### Host-c
+```
+#Docker setup 
+sudo apt-get update
+sudo apt -y install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo docker pull dustnic82/nginx-test
+sudo docker run --name nginx -p 80:80 -d dustnic82/nginx-test
+#Network setup
+sudo ip addr add 192.168.4.2/24 dev enp0s8
+sudo ip link set dev enp0s8 up
+sudo ip route add 192.168.0.0/21 via 192.168.4.1
+```
+### Router-1
+```
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo ip addr add 192.168.1.1/30 dev enp0s9
+sudo ip link set dev enp0s9 up
+sudo ip link add link enp0s8 name enp0s8.2 type vlan id 2
+sudo ip link add link enp0s8 name enp0s8.3 type vlan id 3
+sudo ip addr add 192.168.0.1/24 dev enp0s8.2
+sudo ip addr add 192.168.3.1/23 dev enp0s8.3
+sudo ip link set dev enp0s8 up
+sudo ip route add 192.168.4.0/24 via 192.168.1.2
+```
+### Router-2
+```
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo ip addr add 192.168.1.2/30 dev enp0s9
+sudo ip link set dev enp0s9 up
+sudo ip addr add 192.168.4.1/24 dev enp0s8
+sudo ip link set dev enp0s8 up
+sudo ip route add 192.168.0.0/21 via 192.168.1.1
+sudo ip route add 192.168.4.0/24 via 192.168.1.2
+
+```
+### Switch
+```
+#Openvswitch setup
+apt-get update
+apt-get install -y tcpdump
+apt-get install -y openvswitch-common openvswitch-switch apt-transport-https ca-certificates curl software-properties-common
+#Network setup
+sudo ovs-vsctl add-br switch
+sudo ovs-vsctl add-port switch enp0s8
+sudo ovs-vsctl add-port switch enp0s9 tag="2"
+sudo ovs-vsctl add-port switch enp0s10 tag="3"
+sudo ip link set dev enp0s8 up
+sudo ip link set dev enp0s9 up
+sudo ip link set dev enp0s10 up
+```
 
 ## Test and results
-To test our network we gave the command `ping -c3 192.168.4.2` from both host-a and host-b.
-After it compiled succesfully, in order to obtain the HMTL page from host-a we used the command `curl 192.168.4.2`.
-Here there is the result:
+To test our network, we bringed up the newtwork with `vagrant up`, then we logged in each VM with `vagrant ssh`.
+Then we used the command `ping -c3 192.168.4.2` from both host-a and host-b to verify the reachability of host-c.
+
+After that, in order to obtain the HMTL page from host-a we used the command `curl 192.168.4.2`.
+The result is shown below:
 ```
 <!DOCTYPE html>
 <html>
