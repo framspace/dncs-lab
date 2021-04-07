@@ -119,23 +119,60 @@ The assignment deliverable consists of a Github repository containing:
 # Design
 
 
-This project has been made by Emanuele Chini (matr. 202488) and Francesco Malagò (matr. 172080). 
+This project was made by Emanuele Chini (matr. 202488) and Francesco Malagò (matr. 172080). 
 
 ## Requirements
 The initiator script gave us this requirements:
-- Host a number address: 199 
-- Host b number address: 292
-- Host c number address: 200 
+- Host a usable addresses: 199 
+- Host b usable addresses: 292
+- Host c usable addresses: 200 
+
+## Subnets
+In order to satisfy the project requirements we decided to create 4 subnet, which are respectively:
+- 192.168.1.0/30 between Router-1 and Router-2 in order to cover only the andresses of the two routers.
+- 192.168.0.0/24 between Host-a and Router-1 in order to cover the 199 addresses required (2^8-2=254 > 199)
+- 192.168.3.0/23 between Host-b and Router-1 in order to cover the 292 addresses required (2^9-2=510 > 292)
+- 192.168.4.0/24 between Host-c and Router-2 in order to cover the 200 addresses required
 
 ## Network design and implementation 
-In order to satisfy the project requirements we decided to create 4 subnet, which are respectively:
-1. Router-1 <--> Router-2, with IP 192.168.1.1/30 
-2. Router-1 <--> Host-b, with IP 192.168.3.1/23
-3. Router-1 <--> Host-a, with IP 192.168.0.1/24
-4. Router-2 <--> Host-c, with IP 192.168.4.2/24
 
+## IP and VLANs table
+|  Device  | Interface  |     IP      | Subnet |
+| :------: | :--------: | :---------: | :----: |
+| Router-1 |  enp0s9    | 192.168.1.1 |   1    |
+| Router-2 |  enp0s9    | 192.168.1.2 |   1    |
+| Router-1 | enp0s8.2   | 192.168.0.1 |   2    |
+|  Host-a  |  enp0s8    | 192.168.0.2 |   2    |
+| Router-1 | enp0s8.3   | 192.168.3.1 |   3    |
+|  Host-b  |  enp0s8    | 192.168.3.2 |   3    |
+| Router-2 |  enp0s8    | 192.168.4.1 |   4    |
+|  Host-c  |  enp0s8    | 192.168.4.2 |   4    |
 
+## Vagrant file
+The vagrant file contains the basic setup for every virtual machine, including the path to each start up script.
+We modifed the paths to the start up script for every virtual machine (default is common.sh), afterwards we also increased the virtual memory dedicated to Host-c from 256 MB to 512 MB to be able to run the Docker image.
 
+## Configuration
+For each device we created a script file containing all the command necessary, the content of which is shown below.
+
+### Host-a
+
+```
+sudo ip addr add 192.168.0.2/24 dev enp0s8
+sudo ip link set dev enp0s8 up
+sudo ip route add 192.168.0.0/21 via 192.168.0.1
+
+```
+
+### Host-b
+
+### Host-c
+
+### Router-1
+
+### Router-2
+
+### Switch
 ## Test and results
 To test our network we gave the command `ping -c3 192.168.4.2` from both host-a and host-b.
 After it compiled succesfully, in order to obtain the HMTL page from host-a we used the command `curl 192.168.4.2`.
