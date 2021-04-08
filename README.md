@@ -130,10 +130,10 @@ The initiator script gave us this requirements:
 
 ## Subnets
 In order to satisfy the project requirements we decided to create 4 subnet, which are respectively:
-- 192.168.1.0/30 between Router-1 and Router-2 in order to cover only the andresses of the two routers.
-- 192.168.0.0/24 between Host-a and Router-1 in order to cover the 199 addresses required (2^8-2=254 > 199)
-- 192.168.3.0/23 between Host-b and Router-1 in order to cover the 292 addresses required (2^9-2=510 > 292)
-- 192.168.4.0/24 between Host-c and Router-2 in order to cover the 200 addresses required
+- 192.168.1.0/30 between Router-1 and Router-2 to cover only the andresses of the two routers.
+- 192.168.0.0/24 between Host-a and Router-1 to cover the 199 addresses required (2^8-2=254 > 199)
+- 192.168.3.0/23 between Host-b and Router-1 to cover the 292 addresses required (2^9-2=510 > 292)
+- 192.168.4.0/24 between Host-c and Router-2 to cover the 200 addresses required
 
 ## Network design and implementation 
 
@@ -150,17 +150,17 @@ In order to satisfy the project requirements we decided to create 4 subnet, whic
 |  Host-c  |  enp0s8    | 192.168.4.2 |   4    |
 
 ## Vagrant file
-The vagrant file contains the basic setup for every virtual machine, including the path to each start up script.
-We modifed the paths to the start up script for every virtual machine (default is common.sh), afterwards we also increased the virtual memory dedicated to Host-c from 256 MB to 512 MB to be able to run the Docker image.
+The vagrant file contains the basic setup for every virtual machine, including the path to each start-up script.
+We modified the paths to the start-up script for every virtual machine (default is common.sh), afterwards we also increased the virtual memory dedicated to Host-c from 256 MB to 512 MB to be able to run the Docker image.
 
 ## List of commands
 In the various scripts we used several commands which are explained below:
-- In order to know what interfaces are physically installed on a system it's necessary to use this command because `ifconfig` shows only interfaces that are in a configured state. 
+- To know what interfaces are physically installed on a system it's necessary to use this command because `ifconfig` shows only interfaces that are in a configured state. 
 
 ```
 dsmeg| grep -i eth
 ```
-- Assignes an IP address to a specific interface.
+- Assigns an IP address to a specific interface.
 
 ```
 ip addr add [ip] dev [interface]
@@ -202,7 +202,7 @@ docker run --name nginx -p 80:80 -d dustnic82/nginx-test
 ```
 
 ## Configuration
-For each device we created a script file with all the commands necessary, the content of which is shown below.
+For each device, we created a script file with all the commands necessary, the content of which is shown below.
 
 ### Host-a
 ```
@@ -270,10 +270,10 @@ sudo ip link set dev enp0s10 up
 ```
 
 ## Test and results
-To test our network, we bringed up the newtwork with `vagrant up`, then we logged in each VM with `vagrant ssh`.
+To test our network, we brought up the network with `vagrant up`, then we logged in each VM with `vagrant ssh`.
 Then we used the command `ping -c3 192.168.4.2` from both host-a and host-b to verify the reachability of host-c.
 
-After that, in order to obtain the HMTL page from host-a we used the command `curl 192.168.4.2`.
+After that, in order to obtain the HMTL page from host-a, we used the command `curl 192.168.4.2`.
 The result is shown below:
 ```
 <!DOCTYPE html>
