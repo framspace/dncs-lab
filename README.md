@@ -138,16 +138,19 @@ In order to satisfy the project requirements we decided to create 4 subnet, whic
 ## Network design and implementation 
 
 ## IP and VLANs table
-|  Device  | Interface  |     IP      | Subnet |
-| :------: | :--------: | :---------: | :----: |
-| Router-1 |  enp0s9    | 192.168.1.1 |   1    |
-| Router-2 |  enp0s9    | 192.168.1.2 |   1    |
-| Router-1 | enp0s8.2   | 192.168.0.1 |   2    |
-|  Host-a  |  enp0s8    | 192.168.0.2 |   2    |
-| Router-1 | enp0s8.3   | 192.168.3.1 |   3    |
-|  Host-b  |  enp0s8    | 192.168.3.2 |   3    |
-| Router-2 |  enp0s8    | 192.168.4.1 |   4    |
-|  Host-c  |  enp0s8    | 192.168.4.2 |   4    |
+|  Device  | Interface  |     IP      | Subnet | Color subnet|
+| :------: | :--------: | :---------: | :----: | :----: |
+| Router-1 |  enp0s9    | 192.168.1.1 |   1    | Orange |
+| Router-2 |  enp0s9    | 192.168.1.2 |   1    | Orange |
+| Router-1 | enp0s8.2   | 192.168.0.1 |   2    | Yellow |
+|  Host-a  |  enp0s8    | 192.168.0.2 |   2    | Yellow |
+| Router-1 | enp0s8.3   | 192.168.3.1 |   3    | Green |
+|  Host-b  |  enp0s8    | 192.168.3.2 |   3    | Green |
+| Router-2 |  enp0s8    | 192.168.4.1 |   4    | Blue |
+|  Host-c  |  enp0s8    | 192.168.4.2 |   4    | Blue |
+
+![image](https://user-images.githubusercontent.com/74667849/116001858-11426080-a5f7-11eb-99c5-ca0bd7e351ad.png)
+
 
 ## Vagrant file
 The vagrant file contains the basic setup for every virtual machine, including the path to each start-up script.
