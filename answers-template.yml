@@ -1,18 +1,19 @@
-FirstName: {{ FirstName }}
-LastName: {{ LastName }}
-MatriculationNumber: {{ MatriculationNumber }}
-AcademicYear: 2019-2020
-GitHubUrl: YourGithubRepositoryURL
+FirstName: Emanuele
+LastName: Chini
+MatriculationNumber: 202488
+
+AcademicYear: 2020-2021
+GitHubUrl: https://github.com/EmaChini/dncs-lab
 Subnets:
   HostsA:
-    RequiredAddresses: {{ HostsASubnetRequiredAddresses }}
-    SubnetAddress: YourHostsASubnetAddress
-    SubnetPrefixLength: YourHostsASubnetPrefixLength
+    RequiredAddresses: 199
+    SubnetAddress: 192.168.0.0
+    SubnetPrefixLength: 24
   HostsB:
-    RequiredAddresses: {{ HostsBSubnetRequiredAddresses }}
-    SubnetAddress: YourHostsBSubnetAddress
-    SubnetPrefixLength: YourHostsBSubnetPrefixLength
+    RequiredAddresses: 292
+    SubnetAddress: 192.168.3.0
+    SubnetPrefixLength: 23
   Hub:
-    RequiredAddresses: {{ HubSubnetRequiredAddresses }}
-    SubnetAddress: YourHubSubnetAddress
-    SubnetPrefixLength: YourHubSubnetPrefixLength
+    RequiredAddresses: 200
+    SubnetAddress: 192.168.4.0
+    SubnetPrefixLength: 24
