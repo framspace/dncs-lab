@@ -201,7 +201,7 @@ apt -y install docker.io
 systemctl start docker
 systemctl enable docker
 docker pull dustnic82/nginx-test
-docker run --name nginx -p 80:80 -d dustnic82/nginx-test 
+docker run -p 80:80 -d dustnic82/nginx-test 
 ```
 
 ## Configuration
@@ -227,7 +227,7 @@ sudo apt -y install docker.io
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo docker pull dustnic82/nginx-test
-sudo docker run --name nginx -p 80:80 -d dustnic82/nginx-test
+sudo docker run -p 80:80 -d dustnic82/nginx-test
 #Network setup
 sudo ip addr add 192.168.4.2/24 dev enp0s8
 sudo ip link set dev enp0s8 up
@@ -253,7 +253,7 @@ sudo ip link set dev enp0s9 up
 sudo ip addr add 192.168.4.1/24 dev enp0s8
 sudo ip link set dev enp0s8 up
 sudo ip route add 192.168.0.0/21 via 192.168.1.1
-sudo ip route add 192.168.4.0/24 via 192.168.1.2
+sudo ip route add 192.168.3.0/24 via 192.168.1.1
 
 ```
 ### Switch
